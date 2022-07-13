@@ -1,0 +1,20 @@
+{
+    "schemaVersion": "2.0",
+    "version": "Auto-Generated-1639848973933",
+    "packages": {
+        "windows": {
+            "_any": {
+                "_any": {
+                    "file": "NessusAgent-10.0.1-x64.zip"
+                }
+            }
+        }
+    },
+    "files": {
+        "NessusAgent-10.0.1-x64.zip": {
+            "checksums": {
+                "sha256": "7B990F55741866A0DF8B0A09F22633466062D26E20DD0E536602A558329FFE06"
+            }
+        }
+    }
+}

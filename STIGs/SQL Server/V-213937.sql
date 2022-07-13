@@ -1,0 +1,76 @@
+
+-- V-213937
+
+USE MASTER;
+
+DECLARE @SQLAUDITADMINS varchar(255);
+SET @SQLAUDITADMINS = DEFAULT_DOMAIN() + '\SqlAuditAdmins';
+PRINT @SQLAUDITADMINS
+
+DECLARE @EXEC varchar(255);
+
+
+SET @EXEC ='CREATE LOGIN [' + @SQLAUDITADMINS + '] FROM WINDOWS WITH DEFAULT_DATABASE=[master]';
+PRINT @EXEC;
+IF NOT EXISTS (SELECT 1 FROM master.sys.server_principals WHERE [name] = @SQLAUDITADMINS )	EXEC(@EXEC);
+
+
+SET @EXEC ='CREATE SERVER ROLE SERVER_AUDIT_MAINTAINERS  AUTHORIZATION [' + @SQLAUDITADMINS +']';
+PRINT @EXEC;
+IF NOT EXISTS (SELECT 1 FROM  sys.server_principals where [name] ='SERVER_AUDIT_MAINTAINERS' and type_desc='SERVER_ROLE' ) 	EXEC(@EXEC);
+	
+
+GRANT ALTER ANY SERVER AUDIT TO SERVER_AUDIT_MAINTAINERS;
+
+
+DROP TABLE  IF EXISTS #temp;
+
+SELECT sp.name,
+sp.type,
+    sp.type_desc,
+    sl.password_hash,
+    sp.create_date,
+    sp.modify_date,
+    sp.is_disabled
+INTO #TEMP
+FROM sys.server_principals sp
+left join sys.sql_logins sl
+          on sp.principal_id = sl.principal_id
+where sp.type not in ('G', 'R','C') and sp.name <> 'xsa'
+
+
+DECLARE @NAME varchar(50);
+
+DECLARE cursorNAME CURSOR LOCAL FOR
+SELECT name FROM #temp;
+
+OPEN cursorNAME;
+
+FETCH NEXT FROM cursorNAME INTO @NAME
+PRINT(@NAME)
+WHILE @@FETCH_STATUS=0
+BEGIN
+
+DECLARE @ALTER varchar(200);
+
+SET @ALTER ='ALTER SERVER ROLE [SERVER_AUDIT_MAINTAINERS] DROP MEMBER [' +  @NAME + ']';
+PRINT @ALTER;
+EXEC(@ALTER);
+
+SET @ALTER ='REVOKE ALTER ANY SERVER AUDIT TO [' +  @NAME + ']';
+PRINT @ALTER;
+EXEC(@ALTER);
+
+
+FETCH NEXT FROM cursorNAME INTO  @NAME
+
+END
+
+CLOSE cursorNAME;
+
+
+SET @EXEC ='ALTER SERVER ROLE [SERVER_AUDIT_MAINTAINERS] ADD MEMBER [' + @SQLAUDITADMINS + ']';
+PRINT @EXEC;
+EXEC(@EXEC);
+GO
+

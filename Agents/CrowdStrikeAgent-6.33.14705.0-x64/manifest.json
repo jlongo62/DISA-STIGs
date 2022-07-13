@@ -1,0 +1,21 @@
+{
+    "schemaVersion": "2.0",
+    "version": "Auto-Generated-1639848973933",
+    "packages": {
+        "windows": {
+            "_any": {
+                "_any": {
+                    "file": "CrowdStrikeAgent-6.33.14705.0-x64.zip"
+                }
+            }
+        }
+    },
+    "files": {
+        "CrowdStrikeAgent-6.33.14705.0-x64.zip": {
+            "checksums": {
+                "sha256": "1F2D3604085EE9BDFF22BE4EC2140C4F609A6F4DAB5437E7E401FC82DA3B6E0E"
+            }
+        }
+    }
+}
+

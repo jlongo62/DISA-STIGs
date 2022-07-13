@@ -1,0 +1,5 @@
+USE [master]
+GO
+
+ALTER LOGIN [sa] DISABLE
+GO

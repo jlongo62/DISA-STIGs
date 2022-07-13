@@ -1,0 +1,35 @@
+EXEC sp_linkedservers;
+GO
+
+BEGIN
+
+	USE MASTER;
+
+	DROP TABLE  IF EXISTS #temp
+
+	SELECT * INTO #TEMP FROM SYS.SERVERS WHERE IS_LINKED = '1'
+
+	DECLARE @SRV_NAME varchar(50)
+
+	DECLARE cursorSRV_NAME CURSOR LOCAL FOR
+		SELECT name FROM #temp
+
+	OPEN cursorSRV_NAME
+
+		FETCH NEXT FROM cursorSRV_NAME INTO @SRV_NAME
+		PRINT(@SRV_NAME)
+		WHILE @@FETCH_STATUS=0
+		BEGIN
+			Exec sp_dropserver @SRV_NAME, 'droplogins';
+			FETCH NEXT FROM cursorSRV_NAME INTO  @SRV_NAME
+		END
+
+	CLOSE cursorSRV_NAME
+
+END
+GO
+
+
+
+EXEC sp_linkedservers;
+GO
