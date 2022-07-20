@@ -30,11 +30,14 @@ Remove-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/au
 
 # groups is unsupported, but tenable is testing for that in audit v2r5
 # ignored; I thhink the audit file is wrong groups=roles
-Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{groups='Administrators'} -Type allow
+# Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{groups='Administrators'} -Type allow
 
 # works
-Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{roles='Administrators'} -Type allow
-Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{users='?'} -Type deny
+# Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{roles='Administrators'} -Type allow
+Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{users='*'} -Type allow
+
+#breaks servers
+# Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{users='?'} -Type deny
 
 $PostConfigurationUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
 [System.Management.Automation.PSSerializer]::Serialize($PreConfigUsers)
