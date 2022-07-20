@@ -3,16 +3,10 @@
 ###################################################################################
                 
 
-    $Extensions = @(
-        
-        "notListedCgisAllowed",
-        "notListedIsapisAllowed"
-    ) 
-
     $FilterPath = 'system.webserver/security/isapiCgiRestriction'
 
 
-    Write-Host "`nConfiguring STIG Settings for $($MyInvocation.MyCommand):`n"
+    Write-Host "Configuring STIG Settings for $($MyInvocation.MyCommand):`n"
     
     $PreConfigCGIExtension = Get-WebConfigurationProperty -Filter $FilterPath -Name "notListedCgisAllowed"
     $PreConfigISAPIExtension = Get-WebConfigurationProperty -Filter $FilterPath -Name "notListedIsapisAllowed"
@@ -22,23 +16,6 @@
 
     $PostConfigurationCGIExtension = Get-WebConfigurationProperty -Filter $FilterPath -Name "notListedCgisAllowed"
     $PostConfigurationISAPIExtension = Get-WebConfigurationProperty -Filter $FilterPath -Name "notListedIsapisAllowed"
-
     
-    [PSCustomObject] @{
-                
-        Vulnerability = "V-76769"
-        Computername = $env:COMPUTERNAME
-        PreConfigCGI = $PostConfigurationCGIExtension.Value
-        PreConfigISAPI = $PostConfigurationISAPIExtension.Value
-        PostConfigurationCGI = $PostConfigurationCGIExtension.Value
-        PostConfigurationISAPI = $PostConfigurationISAPIExtension.Value
-        Compliant = if($PostConfigurationCGIExtension.Value -eq $false -and $PostConfigurationISAPIExtension.Value -eq $false) {
-                    
-            "Yes"
-        }
-
-        else {
-                    
-            "No: If auto configuration failed, this section may be locked. Configure manually." 
-        }
-    }
+    Write-Host  $PostConfigurationCGIExtension 
+    Write-Host  $PostConfigurationISAPIExtension
