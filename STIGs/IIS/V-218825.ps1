@@ -22,7 +22,7 @@ $PreConfigUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
 Remove-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "."
 
 Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{roles='Administrators'} -Type allow
-Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{users='administrator'} -Type allow
+Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{groups='administrators'} -Type allow
 Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{users='?'} -Type deny
 
 $PostConfigurationUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
