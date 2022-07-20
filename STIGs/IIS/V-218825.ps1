@@ -15,32 +15,16 @@
 
 [String]$FilterPath = 'system.web/authorization/allow'
    
-
 $PreConfigUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
 [System.Management.Automation.PSSerializer]::Serialize($PreConfigUsers)
 
 Remove-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "."
 
+#groups is unsupported, but tenable is testing for that in audit v2r5
+Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{groups='Administrators'} -Type allow
 Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{roles='Administrators'} -Type allow
-Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{groups='administrators'} -Type allow
 Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{users='?'} -Type deny
 
 $PostConfigurationUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
-
-[PSCustomObject] @{
-                
-    Vulnerability = "V-76771"
-    Computername = $env:COMPUTERNAME
-    PreConfigAuthorizedUsers = $PreConfigUsers.Value
-    PostConfigurationAuthorizedUsers = $PostConfigurationUsers.Value
-    Compliant = if($PostConfigurationUsers.Value -eq "Administrators") {
-                    
-        "Yes"
-    }
-
-    else {
-                    
-        "No" 
-    }
-}
+[System.Management.Automation.PSSerializer]::Serialize($PreConfigUsers)
 
