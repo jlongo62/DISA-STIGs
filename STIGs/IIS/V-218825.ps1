@@ -39,3 +39,6 @@ Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/autho
 $PostConfigurationUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
 [System.Management.Automation.PSSerializer]::Serialize($PreConfigUsers)
 
+Write-Output  ""
+Write-Output "Tenable Audit 'ComplianceActualValue will be:"
+c:\windows\system32\inetsrv/appcmd.exe list config /section:system.web/authorization
