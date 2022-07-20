@@ -29,7 +29,7 @@ $PreConfigUsers = Get-WebConfigurationProperty -Filter $FilterPath -Name Users
 Remove-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "."
 
 # groups is unsupported, but tenable is testing for that in audit v2r5
-# ignored; I thhink the audit file is wrong 
+# ignored; I thhink the audit file is wrong groups=roles
 Add-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter "system.web/authorization" -Name "." -Value @{groups='Administrators'} -Type allow
 
 # works
