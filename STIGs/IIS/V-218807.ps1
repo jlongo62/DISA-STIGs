@@ -8,28 +8,13 @@
    
     $PreConfigValidation = Get-WebConfigurationProperty -Filter $FilterPath -Name Validation
     $PreConfigEncryption = Get-WebConfigurationProperty -Filter $FilterPath -Name Decryption
+    [System.Management.Automation.PSSerializer]::Serialize($PreConfigValidation)
+    [System.Management.Automation.PSSerializer]::Serialize($PreConfigEncryption)
 
     Set-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter $FilterPath -Name "Validation" -Value "HMACSHA256"
     Set-WebConfigurationProperty -PSPath 'MACHINE/WEBROOT' -Filter $FilterPath -Name "Decryption" -Value "Auto"
 
     $PostConfigurationValidation = Get-WebConfigurationProperty -Filter $FilterPath -Name Validation
     $PostConfigurationEncryption = Get-WebConfigurationProperty -Filter $FilterPath -Name Decryption
-
-    [PSCustomObject] @{
-               
-        Vulnerability = "V-76731"
-        Computername = $env:COMPUTERNAME
-        PreConfigValidation = $PreConfigValidation
-        PreConfigEncryption = $PreConfigEncryption.Value
-        PostConfigurationValidation = $PostConfigurationValidation
-        PostConfigurationEncryption = $PostConfigurationEncryption.Value
-        Compliant = if($PostConfigurationValidation -eq 'HMACSHA256' -and $PostConfigurationEncryption.Value -eq 'Auto') {
-                   
-            "Yes"
-        }
-
-        else {
-                   
-            "No"
-        }
-    }
+    [System.Management.Automation.PSSerializer]::Serialize($PostConfigurationValidation)
+    [System.Management.Automation.PSSerializer]::Serialize($PostConfigurationEncryption)
