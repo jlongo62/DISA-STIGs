@@ -99,7 +99,8 @@ $ids  = "S-1-5-11" `
 ,"S-1-5-32-568" `
 ,"S-1-5-82-3006700770-424185619-1745488364-794895919-4004696415" `
 ,"S-1-5-80-.*(?:,|$)" `
-,"SQLServer.*,"
+,"SQLServer.*," `
+,"ASPNET"
 
 (Get-Content -Path $filename) -replace " ", "" | Set-Content -Path $filename
 (Get-Content -Path $filename) -replace "\*", "" | Set-Content -Path $filename
