@@ -9,7 +9,7 @@
 USE master;
 GO
 DECLARE @root AS VARCHAR(255);
-SET @root = '\\......\share\test\SQLServerKeys\SERVICE_MASTER_KEYS\'
+SET @root = '\\......\share\SQLServers-ServiceKeyBackup_V-213973\'
 
 DECLARE @password AS VARCHAR(30);
 SET  @password = '.......';
