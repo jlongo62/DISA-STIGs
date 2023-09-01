@@ -22,24 +22,16 @@ SET @sql = 'BACKUP SERVICE MASTER KEY TO FILE = ''' + @path +  ''' ENCRYPTION BY
 PRINT  @sql 
 EXEC (@sql);
 
-SET @path =  'L:\SQLServers-ServiceKeyBackup_V-213973\' +  REPLACE(@@SERVERNAME,'\','_') + '.key';
-SET @sql = 'BACKUP SERVICE MASTER KEY TO FILE = ''' + @path +  ''' ENCRYPTION BY PASSWORD = ''' +  @password + '''';
-PRINT  @sql 
-EXEC (@sql);
 
 DECLARE @cmd AS VARCHAR(255)
 SET @cmd = 'ECHO ''' +  @password +  ''' >> "' + @root +  REPLACE(@@SERVERNAME,'\','_') + 'password.txt"';
 PRINT @cmd
 
-DECLARE @cmd2 AS VARCHAR(255)
-SET @cmd2 = 'ECHO ''' +  @password +  ''' >> "' + 'L:\SQLServers-ServiceKeyBackup_V-213973\' +  REPLACE(@@SERVERNAME,'\','_') + 'password.txt"';
-PRINT @cmd2
 /************************************
 * WRITE PAssword file
 ************************************/
 BEGIN TRY
 	exec xp_cmdshell @cmd ;
-	exec xp_cmdshell @cmd2 ;
 END TRY
 
 BEGIN CATCH
@@ -48,7 +40,6 @@ BEGIN CATCH
 	RECONFIGURE WITH OVERRIDE;
 
 	exec xp_cmdshell @cmd ;
-	exec xp_cmdshell @cmd2 ;
 
 	EXECUTE sp_configure 'xp_cmdshell', 0;
 	RECONFIGURE WITH OVERRIDE;
