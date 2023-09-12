@@ -24,7 +24,28 @@ PRINT  @sql
 EXEC (@sql);
 
 
+/************************************
+* WRITE PAssword file
+************************************/
 DECLARE @cmd AS VARCHAR(255)
 SET @cmd = 'ECHO ''' +  @password +  ''' >> "' + @root +  REPLACE(@@SERVERNAME,'\','_') + 'password.txt"';
 PRINT @cmd
 
+/************************************
+* WRITE PAssword file
+************************************/
+BEGIN TRY
+	exec xp_cmdshell @cmd ;
+END TRY
+
+BEGIN CATCH
+
+	EXECUTE sp_configure 'xp_cmdshell', 1;
+	RECONFIGURE WITH OVERRIDE;
+
+	exec xp_cmdshell @cmd ;
+
+	EXECUTE sp_configure 'xp_cmdshell', 0;
+	RECONFIGURE WITH OVERRIDE;
+
+END CATCH
