@@ -9,7 +9,7 @@
 USE master;
 GO
 DECLARE @root AS VARCHAR(255);
-SET @root = '\\...\share\test\SQLServerKeys\MASTER_KEYS\'
+SET @root = '\\management\share\SQL Scripts\SQLServers-MasterKeyBackup_V-213974\'
 
 DECLARE @password AS VARCHAR(30);
 SET  @password = '...';
@@ -24,26 +24,7 @@ PRINT  @sql
 EXEC (@sql);
 
 
-/************************************
-* WRITE PAssword file
-************************************/
 DECLARE @cmd AS VARCHAR(255)
-SET @cmd = 'ECHO ''' +  @password +  ''' >> "' + @root + 'password.txt"';
+SET @cmd = 'ECHO ''' +  @password +  ''' >> "' + @root +  REPLACE(@@SERVERNAME,'\','_') + 'password.txt"';
 PRINT @cmd
-
-BEGIN TRY
-	exec xp_cmdshell @cmd ;
-END TRY
-
-BEGIN CATCH
-
-	EXECUTE sp_configure 'xp_cmdshell', 1;
-	RECONFIGURE WITH OVERRIDE;
-
-	exec xp_cmdshell @cmd ;
-
-	EXECUTE sp_configure 'xp_cmdshell', 0;
-	RECONFIGURE WITH OVERRIDE;
-
-END CATCH
 
