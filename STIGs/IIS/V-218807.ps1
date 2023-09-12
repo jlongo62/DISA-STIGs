@@ -4,7 +4,7 @@
 
     $FilterPath = 'system.web/machineKey'
 
-    Write-Host "`nConfiguring STIG Settings for $($MyInvocation.MyCommand):`n"
+    Write-Host "Configuring STIG Settings for $($MyInvocation.MyCommand):"
    
     $PreConfigValidation = Get-WebConfigurationProperty -Filter $FilterPath -Name Validation
     $PreConfigEncryption = Get-WebConfigurationProperty -Filter $FilterPath -Name Decryption
